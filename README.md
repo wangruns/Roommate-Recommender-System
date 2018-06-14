@@ -1,2 +1,2 @@
 # Roommate-Recommender-System
-2018年研究生室友推荐系统——Roommate Matching——异想天开(简单小应用帮助同学寻找习性相同的室友)
+2018年研究生室友推荐系统——Roommate Matching——简单小应用帮助同学寻找习性相同的室友
