@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.wangruns.roommatematching.dao.UserDao">
+
+	<select id="selectByUser" parameterType="top.wangruns.roommatematching.model.User"
+		resultType="top.wangruns.roommatematching.model.User">
+		select * from user where email=#{email} and password=#{password}
+	</select>
+	
+	<select id="selectByEmail" parameterType="String"
+		resultType="top.wangruns.roommatematching.model.User">
+		select * from user where email=#{email}
+	</select>
+	
+	<insert id="insert" parameterType="top.wangruns.roommatematching.model.User">
+		insert into user(email,password) select #{email},#{password}
+		from dual where #{email} not in (select email from user)
+	</insert>
+	
+	<select id="selectAll"
+		resultType="top.wangruns.roommatematching.model.User">
+		select * from user
+	</select>
+	
+	<select id="selectAllUserId"
+		resultType="Integer">
+		select userId from user
+	</select>
+	
+	
+	<select id="selectAllSchools"
+		resultType="top.wangruns.roommatematching.model.School">
+		select * from school
+	</select>
+	
+	<select id="selectAllMajors"
+		resultType="top.wangruns.roommatematching.model.Major">
+		select * from major
+	</select>
+	
+	<update id="updateUserInfo" parameterType="top.wangruns.roommatematching.model.User">
+		update user set userName=#{userName},schoolId=#{schoolId},majorId=#{majorId},gender=#{gender},
+		selfInfo=#{selfInfo},expectedInfo=#{expectedInfo},photoAddress=#{photoAddress} 
+		where userId=#{userId}
+	</update>
+	
+	<update id="updateActiveStatus" parameterType="top.wangruns.roommatematching.model.User">
+		update user set status=1 where userId=#{userId}
+	</update>
+	
+	<select id="selectLikingUserIds" parameterType="int"
+		resultType="int"> 
+		select likingUserId from liking where userId=#{userId}
+	</select>
+	
+	<select id="selectLikingByLiking" parameterType="top.wangruns.roommatematching.model.Liking"
+		resultType="top.wangruns.roommatematching.model.Liking">
+		select * from liking where userId=#{userId} and likingUserId=#{likingUserId}
+	</select>
+	
+	
+	<insert id="insertLiking" parameterType="top.wangruns.roommatematching.model.Liking">
+		insert into liking(userId,likingUserId) values(#{userId},#{likingUserId})
+	</insert>
+	
+	<delete id="deleteLikingById" parameterType="int"> 
+		delete from liking where likeId=#{likeId}
+	</delete>
+	
+	<!-- 
+	获取和当前用户相互喜欢的用户信息
+	（1）先获取当前用户喜欢的用户Id集合likingTb（排除自己）
+( select likingUserId from liking where userId=#{userId} and likingUserId!=#{userId} ) 
+	（2）再获取likingTb中的用户喜欢的用户是当前用户的用户Id集matchingTb
+( select userId from liking 
+	  where userId in 
+		( select likingUserId from liking where userId=#{userId} and likingUserId!=#{userId} ) 
+		and likingUserId=#{userId} )
+	（3）最后根据matchingTb中的用户Id从User表中得到用户的全部信息
+
+	 -->
+	 <select id="selectMatchingUsers" parameterType="int"
+		resultType="top.wangruns.roommatematching.model.User">
+		select * from user 
+		where userId in
+			( select userId from liking 
+			  where userId in 
+				( select likingUserId from liking where userId=#{userId} and likingUserId!=#{userId} ) 
+				and likingUserId=#{userId} )
+	</select>
+	
+
+</mapper>
