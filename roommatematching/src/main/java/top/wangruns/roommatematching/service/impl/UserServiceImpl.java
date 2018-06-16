@@ -233,4 +233,13 @@ public class UserServiceImpl implements UserService {
 		return matchingUserList;
 	}
 
+	public User getUserById(HttpServletRequest request, int userId) {
+		return userDao.selectUserById(userId);
+	}
+
+	public String getCurUserPhotoAddress(HttpServletRequest request) {
+		User user = userDao.selectByUser(Request.getUserFromHttpServletRequest(request));
+		return user.getPhotoAddress();
+	}
+
 }

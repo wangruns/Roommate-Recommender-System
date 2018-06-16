@@ -127,4 +127,19 @@ public interface UserService {
 	 */
 	public List<User> getMatchingRecordsWithLikingFlag(HttpServletRequest request);
 
+	/**
+	 * 根据用户Id获取当前用户的信息
+	 * @param request
+	 * @param userId
+	 * @return
+	 */
+	public User getUserById(HttpServletRequest request, int userId);
+
+	/**
+	 * 获取当前用户的头像地址
+	 * @param request
+	 * @return
+	 */
+	public String getCurUserPhotoAddress(HttpServletRequest request);
+
 }

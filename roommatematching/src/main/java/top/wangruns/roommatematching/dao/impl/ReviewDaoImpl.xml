@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.wangruns.roommatematching.dao.ReviewDao">
+
+	<insert id="insert" parameterType="top.wangruns.roommatematching.model.Review" >
+		insert into review (userId,targetUserId,review) values(#{userId},#{targetUserId},#{review})
+	</insert>
+	
+    <select id="selectSuportByUserId" parameterType="int"
+		resultType="top.wangruns.roommatematching.model.Support">
+		select * from support where userId = #{userId}
+	</select>
+	
+	<!-- 好久不用，一段大SQLs下来，感觉投都昏了... 
+		（可能这种时候就体现出视图的优势了吧⊙o⊙）
+		目标：获取当前歌曲带有点赞数目的评论信息
+		songReviewWithUserNameTb表：
+			（1）先从评论表中选出与当前歌曲相关的元组
+			（2）再给相关的元组中的用户关联上昵称信息
+			（3）reviewId,userId,userName,review,reviewTime
+		likeCountTb表：
+			（1）先从评论表中选中与当前歌曲相关的元组并作评论ID投影
+			（2）根据相关的评论ID统计出评论被点赞的次数
+			（3）reviewId,count(reviewId) as likeCoefficient
+		songReviewWithUserNameTb左连接likeCountTb：
+			（1）将上面两个表在reviewId上面做左连接
+			（2）[mysql]用ifnull(字段名,默认值)填充连接的空缺值NULL
+			（3）[oracle]用nvl(字段名,默认值)填充连接的空缺值NULL
+		最终选择精彩评论的Top 10
+	-->
+    <select id="selectHotReviewWithSupportNumber" parameterType="int"
+		resultType="top.wangruns.roommatematching.model.Review">
+		select songReviewWithUserNameTb.reviewId,userName,review,reviewTime,ifnull(likeCoefficient,0) as likeCoefficient
+		 from 
+			( select reviewId,user.userId,userName,review,reviewTime  
+			from ( select reviewId,userId,review,date(reviewTime) as reviewTime from review where targetUserId=#{targetUserId} ) as songReviewTb,user
+			where songReviewTb.userId=user.userId 
+			) as songReviewWithUserNameTb
+			
+		left join
+			
+			( select reviewId,count(reviewId) as likeCoefficient from support 
+			where reviewId in ( select reviewId from review where targetUserId=#{targetUserId} ) 
+			group by reviewId
+			) as likeCountTb
+			
+		on songReviewWithUserNameTb.reviewId=likeCountTb.reviewId 
+			
+		order by likeCoefficient desc
+	</select>
+	
+	<select id="selectBySupport" parameterType="top.wangruns.roommatematching.model.Support"
+		resultType="top.wangruns.roommatematching.model.Support">
+		select * from support where userId = #{userId} and reviewId =#{reviewId}
+	</select>
+	
+	<insert id="insertSupportRecord" parameterType="top.wangruns.roommatematching.model.Support" >
+		insert into support (userId,reviewId) values(#{userId},#{reviewId})
+	</insert>
+	
+	<delete id="deleteSupportRecordById" parameterType="int" >
+		delete from support where supportId = #{supportId}
+	</delete>
+
+</mapper>

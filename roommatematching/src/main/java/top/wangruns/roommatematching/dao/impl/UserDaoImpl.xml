@@ -89,5 +89,10 @@
 				and likingUserId=#{userId} )
 	</select>
 	
+	<select id="selectUserById" parameterType="int"
+		resultType="top.wangruns.roommatematching.model.User">
+		select * from user where userId=#{userId}
+	</select>
+	
 
 </mapper>

@@ -111,6 +111,13 @@ public interface UserDao {
 	public List<User> selectMatchingUsers(int userId);
 
 	/**
+	 * 根据用户Id查询信息
+	 * @param userId
+	 * @return
+	 */
+	public User selectUserById(int userId);
+
+	/**
 	 * 根据用户Id查询当前用户的角色信息
 	 * @param userId
 	 * 当前用户的Id
