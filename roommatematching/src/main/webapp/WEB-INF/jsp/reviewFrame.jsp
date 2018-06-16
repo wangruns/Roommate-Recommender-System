@@ -75,7 +75,7 @@
 										<li class="media list-group-item list-group-item-light">
 							                <div class="media-left">
 							                    <a href="#">
-							                        <img class="rounded img-logo" src="" alt="Newcomer" >
+							                        <img class="rounded img-logo" src="" alt="菜鸟" >
 							                    </a>
 							                </div>
 							                <div class="media-body">
