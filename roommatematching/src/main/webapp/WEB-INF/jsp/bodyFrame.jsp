@@ -30,7 +30,8 @@
 						    <p class="card-text">${user.expectedInfo}</p>
 						  </div>
 						  <div class="card-body">
-						    <a href="#" class="card-link">${user.userName}</a>
+						    <%-- <a href="#" class="card-link">${user.userName}</a> --%>
+						    <a href="javascript:;" onclick="reviewLoad(${user.userId})" class="card-link">${user.userName}</a>
 						    <a href="javascript:;" title="admire this person" class="card-link <c:if test="${user.whetherLiking}">text-danger</c:if>" onclick="likingFunc(${user.userId})" id="userId${user.userId}" ><i class="icon-heart"></i></a>
 						  </div>
 					  </div>
