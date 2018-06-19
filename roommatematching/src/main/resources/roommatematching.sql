@@ -31,7 +31,7 @@ CREATE TABLE `liking` (
   KEY `fk_liking_2_idx` (`likingUserId`),
   CONSTRAINT `fk_liking_1` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_liking_2` FOREIGN KEY (`likingUserId`) REFERENCES `user` (`userId`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=177 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,6 @@ CREATE TABLE `liking` (
 
 LOCK TABLES `liking` WRITE;
 /*!40000 ALTER TABLE `liking` DISABLE KEYS */;
-INSERT INTO `liking` VALUES (27,5,7),(22,7,5),(23,7,7);
 /*!40000 ALTER TABLE `liking` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -56,7 +55,7 @@ CREATE TABLE `major` (
   `majorName` varchar(45) NOT NULL,
   `description` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`majorId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,6 +66,36 @@ LOCK TABLES `major` WRITE;
 /*!40000 ALTER TABLE `major` DISABLE KEYS */;
 INSERT INTO `major` VALUES (1,'大数据与软件学院','');
 /*!40000 ALTER TABLE `major` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `review`
+--
+
+DROP TABLE IF EXISTS `review`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `review` (
+  `reviewId` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL,
+  `targetUserId` int(11) NOT NULL,
+  `review` varchar(140) NOT NULL,
+  `reviewTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`reviewId`),
+  KEY `fk_review_1_idx` (`userId`),
+  KEY `fk_review_2_idx` (`targetUserId`),
+  CONSTRAINT `fk_review_1` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_review_2` FOREIGN KEY (`targetUserId`) REFERENCES `user` (`userId`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `review`
+--
+
+LOCK TABLES `review` WRITE;
+/*!40000 ALTER TABLE `review` DISABLE KEYS */;
+/*!40000 ALTER TABLE `review` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -81,7 +110,7 @@ CREATE TABLE `school` (
   `schoolName` varchar(45) NOT NULL,
   `description` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`schoolId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,6 +121,34 @@ LOCK TABLES `school` WRITE;
 /*!40000 ALTER TABLE `school` DISABLE KEYS */;
 INSERT INTO `school` VALUES (1,'重庆大学',NULL);
 /*!40000 ALTER TABLE `school` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `support`
+--
+
+DROP TABLE IF EXISTS `support`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `support` (
+  `supportId` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL,
+  `reviewId` int(11) NOT NULL,
+  PRIMARY KEY (`supportId`),
+  KEY `fk_support_1_idx` (`userId`),
+  KEY `fk_support_2_idx` (`reviewId`),
+  CONSTRAINT `fk_support_1` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_support_2` FOREIGN KEY (`reviewId`) REFERENCES `review` (`reviewId`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `support`
+--
+
+LOCK TABLES `support` WRITE;
+/*!40000 ALTER TABLE `support` DISABLE KEYS */;
+/*!40000 ALTER TABLE `support` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -113,12 +170,14 @@ CREATE TABLE `user` (
   `selfInfo` varchar(255) DEFAULT NULL,
   `expectedInfo` varchar(255) DEFAULT NULL,
   `photoAddress` varchar(255) DEFAULT NULL,
+  `studentId` varchar(45) DEFAULT NULL,
+  `graduateType` int(11) DEFAULT NULL,
   PRIMARY KEY (`userId`),
   KEY `fk_user_1_idx` (`schoolId`),
   KEY `fk_user_2_idx` (`majorId`),
   CONSTRAINT `fk_user_1` FOREIGN KEY (`schoolId`) REFERENCES `school` (`schoolId`) ON UPDATE NO ACTION,
   CONSTRAINT `fk_user_2` FOREIGN KEY (`majorId`) REFERENCES `major` (`majorId`) ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -127,7 +186,6 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (5,'ROOT','root@trackstacking.top','202cb962ac59075b964b07152d234b70',1,1,1,1,'不抽烟不喝酒，喜欢下棋','希望遇见晚上不连麦打游戏的室友','photo/5.jpeg'),(7,'夏琪','13445314@qq.com','c20ad4d76fe97759aa27a0c99bff6710',1,1,0,1,'菜鸡一枚我不哭','希望有一个学霸室友带飞','photo/7.jpg');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -140,4 +198,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-06-15 13:30:19
+-- Dump completed on 2018-06-20  0:42:04
