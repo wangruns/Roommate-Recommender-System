@@ -18,9 +18,24 @@ public class User {
 	private String expectedInfo;
 	private String photoAddress;
 	private boolean whetherLiking;
-	
-	
+	private String studentId;
+	private int graduateType;//	研究生类型：1-本校推免	2-外校推免	3-本校考研	4-外校考研
 
+	public String getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
+	}
+
+	public int getGraduateType() {
+		return graduateType;
+	}
+
+	public void setGraduateType(int graduateType) {
+		this.graduateType = graduateType;
+	}
 
 	public boolean isWhetherLiking() {
 		return whetherLiking;

@@ -142,4 +142,27 @@ public interface UserService {
 	 */
 	public String getCurUserPhotoAddress(HttpServletRequest request);
 
+	/**
+	 * 判定当前用户是否已经申请
+	 * @param request
+	 * @return
+	 * 如果已经申请过了，则返回true
+	 */
+	public boolean isApplyed(HttpServletRequest request);
+
+	/**
+	 * 更新当前用户的申请信息
+	 * @param request 
+	 * @param studentId
+	 * @param graduateType
+	 */
+	public void updateApplying(HttpServletRequest request, String studentId, int graduateType);
+
+	/**
+	 * 获取申请的信息
+	 * 姓名	学号	 入学方式
+	 * @return
+	 */
+	public String getApplyingInfo();
+
 }

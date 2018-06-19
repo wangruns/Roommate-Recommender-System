@@ -118,6 +118,20 @@ public interface UserDao {
 	public User selectUserById(int userId);
 
 	/**
+	 * 更新当前用户的申请信息
+	 * @param userId 
+	 * @param studentId
+	 * @param graduateType
+	 */
+	public void updateApplying(int userId, String studentId, int graduateType);
+
+	/**
+	 * 获取已经申请的用户信息
+	 * @return
+	 */
+	public List<User> selectApplyingUsers();
+
+	/**
 	 * 根据用户Id查询当前用户的角色信息
 	 * @param userId
 	 * 当前用户的Id

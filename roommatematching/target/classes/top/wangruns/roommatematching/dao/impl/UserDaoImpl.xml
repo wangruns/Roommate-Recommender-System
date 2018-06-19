@@ -94,5 +94,13 @@
 		select * from user where userId=#{userId}
 	</select>
 	
+	<update id="updateApplying">
+		update user set studentId=#{1},graduateType=#{2} where userId=#{0}
+	</update>
+	
+	<select id="selectApplyingUsers"
+		resultType="top.wangruns.roommatematching.model.User">
+		select * from user where studentId is not null
+	</select>
 
 </mapper>

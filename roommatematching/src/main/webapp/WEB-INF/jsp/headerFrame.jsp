@@ -27,6 +27,9 @@
             <li class="nav-item" id="matchingId">
               <a class="nav-link" href="#">Matching</a>
             </li>
+            <li class="nav-item" id="applyingId">
+              <a class="nav-link" href="#">Applying</a>
+            </li>
           </ul>
           <form class="form-inline mt-2 mt-md-0" id="searchFormId">
             <input class="form-control mr-sm-2" id="searchInputId" type="text" placeholder="Search" aria-label="Search" name="keyword" required autofocus>
@@ -56,8 +59,12 @@
 		});
 		//admiring
 		$('#admiringId').on('click', function (e) {
-			var index=1
+			var index=1;
 			$('#hot').load("matchingFrameLoad.do?index="+1);
+		});
+		//applying
+		$('#applyingId').on('click', function (e) {
+			$('#hot').load("applyingFrameLoad.do");
 		});
 		
 		

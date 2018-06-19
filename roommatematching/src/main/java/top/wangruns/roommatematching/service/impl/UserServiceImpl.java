@@ -242,4 +242,46 @@ public class UserServiceImpl implements UserService {
 		return user.getPhotoAddress();
 	}
 
+	public boolean isApplyed(HttpServletRequest request) {
+		User user = userDao.selectByUser(Request.getUserFromHttpServletRequest(request));
+		if(user.getStudentId()!=null) {
+			//已经申请过了
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
+
+	public void updateApplying(HttpServletRequest request, String studentId, int graduateType) {
+		User user = userDao.selectByUser(Request.getUserFromHttpServletRequest(request));
+		userDao.updateApplying(user.getUserId(),studentId,graduateType);
+	}
+
+	public String getApplyingInfo() {
+		final StringBuilder sb=new StringBuilder();
+		List<User> applyingUserList=userDao.selectApplyingUsers();
+		applyingUserList.forEach(new Consumer<User>() {
+
+			public void accept(User user) {
+				sb.append(user.getUserName());sb.append("\t");
+				sb.append(user.getStudentId());sb.append("\t");
+				int graduateType=user.getGraduateType();
+				String type=null;
+				if(graduateType==1) {
+					type="本校推免";
+				}else if(graduateType==2) {
+					type="外校推免";
+				}else if(graduateType==3) {
+					type="本校考研";
+				}else {
+					type="外校考研";
+				}
+				sb.append(type);sb.append("\n");
+			}
+			
+		});
+		return sb.toString();
+	}
+
 }
