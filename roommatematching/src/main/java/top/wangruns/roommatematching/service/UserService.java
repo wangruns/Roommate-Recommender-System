@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import top.wangruns.roommatematching.model.Dynamic;
 import top.wangruns.roommatematching.model.Major;
 import top.wangruns.roommatematching.model.School;
 import top.wangruns.roommatematching.model.User;
@@ -164,5 +165,19 @@ public interface UserService {
 	 * @return
 	 */
 	public String getApplyingInfo();
+
+	/**
+	 * 获取在当前用户分享下面的评论动态
+	 * @param request
+	 * @return
+	 */
+	public List<Dynamic> getReviewDynamicList(HttpServletRequest request);
+
+	/**
+	 * 获取在评论中@了当前用户的@动态
+	 * @param request
+	 * @return
+	 */
+	public List<Dynamic> getAtDynamicList(HttpServletRequest request);
 
 }

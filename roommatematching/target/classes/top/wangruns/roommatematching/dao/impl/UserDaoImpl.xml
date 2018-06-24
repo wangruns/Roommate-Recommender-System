@@ -102,5 +102,21 @@
 		resultType="top.wangruns.roommatematching.model.User">
 		select * from user where studentId is not null
 	</select>
+	
+	<select id="selectReviewDynamicByUserId" parameterType="int" 
+		resultType="top.wangruns.roommatematching.model.Dynamic">
+		select userName,reviewTime,dualTb.userId from user,
+		( select reviewTime,userId from review where targetUserId=#{userId} )as reviewTb, 
+		( select #{userId} as userId from dual )as dualTb  
+		where user.userId=reviewTb.userId 
+		order by reviewTime desc
+	</select>
+	
+	<select id="selectReviewsExceptSelf" parameterType="int"  
+		resultType="top.wangruns.roommatematching.model.Review">
+		select userName,review,reviewTime,targetUserId from review,user 
+		where review.userId !=#{userId} and user.userId=review.userId 
+		order by reviewTime desc
+	</select>
 
 </mapper>

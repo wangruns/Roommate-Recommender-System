@@ -8,11 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import top.wangruns.roommatematching.model.Dynamic;
 import top.wangruns.roommatematching.model.User;
 import top.wangruns.roommatematching.service.UserService;
 import top.wangruns.roommatematching.utils.ReturnMsg;
@@ -101,6 +103,24 @@ public class HomeController {
 			}
 			modelAndView.addObject("rowList", rowList);
 			modelAndView.setViewName("bodyFrame");
+		}else {
+			modelAndView.setViewName("login");
+		}
+		return modelAndView;
+	}
+	
+	@GetMapping(value = "dynamicsFrameLoad.do")
+	public ModelAndView dynamicsFrameLoad(HttpServletRequest request) {
+		ModelAndView modelAndView=new ModelAndView();
+		if(userService.isHasPrivilegeAndActive(request)) {
+			//加载其他用户的评论动态
+			List<Dynamic> reviewDynamicList=userService.getReviewDynamicList(request);
+			//加载@当前用户的动态
+			List<Dynamic> atDynamicList=userService.getAtDynamicList(request);
+			
+			modelAndView.addObject("reviewDynamicList", reviewDynamicList);
+			modelAndView.addObject("atDynamicList", atDynamicList);
+			modelAndView.setViewName("dynamicsFrame");
 		}else {
 			modelAndView.setViewName("login");
 		}

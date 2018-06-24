@@ -33,7 +33,7 @@
 		select songReviewWithUserNameTb.reviewId,userName,review,reviewTime,ifnull(likeCoefficient,0) as likeCoefficient
 		 from 
 			( select reviewId,user.userId,userName,review,reviewTime  
-			from ( select reviewId,userId,review,date(reviewTime) as reviewTime from review where targetUserId=#{targetUserId} ) as songReviewTb,user
+			from ( select reviewId,userId,review,reviewTime as reviewTime from review where targetUserId=#{targetUserId} ) as songReviewTb,user
 			where songReviewTb.userId=user.userId 
 			) as songReviewWithUserNameTb
 			

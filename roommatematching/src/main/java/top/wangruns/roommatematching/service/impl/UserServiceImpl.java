@@ -16,8 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import top.wangruns.roommatematching.dao.UserDao;
+import top.wangruns.roommatematching.model.Dynamic;
 import top.wangruns.roommatematching.model.Liking;
 import top.wangruns.roommatematching.model.Major;
+import top.wangruns.roommatematching.model.Review;
 import top.wangruns.roommatematching.model.School;
 import top.wangruns.roommatematching.model.User;
 import top.wangruns.roommatematching.service.UserService;
@@ -282,6 +284,51 @@ public class UserServiceImpl implements UserService {
 			
 		});
 		return sb.toString();
+	}
+
+	public List<Dynamic> getReviewDynamicList(HttpServletRequest request) {
+		User user = userDao.selectByUser(Request.getUserFromHttpServletRequest(request));
+		List<Dynamic> reviewDynamicList=userDao.selectReviewDynamicByUserId(user.getUserId());
+		
+		return reviewDynamicList;
+	}
+
+	public List<Dynamic> getAtDynamicList(HttpServletRequest request) {
+		final User user = userDao.selectByUser(Request.getUserFromHttpServletRequest(request));
+		/**
+		 * 由于本系统使用的人数较少，评论信息较少，用户之间的交互也是，所以这里采用从评论中提取@信息的方式
+		 * 当数据量较大的时候，这不是一种好方式！
+		 */
+		//获取除了自己产生以外的其他评论信息
+		List<Review> reviewList=userDao.selectReviewsExceptSelf(user.getUserId());
+		final List<Dynamic> atDynamicList=new ArrayList<Dynamic>();
+		reviewList.forEach(new Consumer<Review>() {
+
+			public void accept(Review review) {
+				if(isReviewAtCurUser(review.getReview(),user.getUserName())) {
+					atDynamicList.add(new Dynamic(review.getUserName(),review.getReviewTime(),review.getTargetUserId()));
+				}
+			}
+			
+		});
+		
+		
+		return atDynamicList;
+	}
+
+	/**
+	 * 判定当前评论字符串里面是否@了当前用户名
+	 * 这里由于人数较少，所以采用用户名的方式，这并不是一种较好的方式！
+	 * @param review
+	 * @param userName
+	 * @return
+	 */
+	private boolean isReviewAtCurUser(String review, String userName) {
+		String str="@"+userName;
+		if(review!=null && review.contains(str)) {
+			return true;
+		}
+		return false;
 	}
 
 }

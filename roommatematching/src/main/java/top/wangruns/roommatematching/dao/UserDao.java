@@ -2,8 +2,10 @@ package top.wangruns.roommatematching.dao;
 
 import java.util.List;
 
+import top.wangruns.roommatematching.model.Dynamic;
 import top.wangruns.roommatematching.model.Liking;
 import top.wangruns.roommatematching.model.Major;
+import top.wangruns.roommatematching.model.Review;
 import top.wangruns.roommatematching.model.School;
 import top.wangruns.roommatematching.model.User;
 
@@ -130,6 +132,20 @@ public interface UserDao {
 	 * @return
 	 */
 	public List<User> selectApplyingUsers();
+
+	/**
+	 * 查找当前用户Id自我分享下面的评论动态
+	 * @param userId
+	 * @return
+	 */
+	public List<Dynamic> selectReviewDynamicByUserId(int userId);
+
+	/**
+	 * 获取不是当前用户产生的评论信息
+	 * @param userId
+	 * @return
+	 */
+	public List<Review> selectReviewsExceptSelf(int userId);
 
 	/**
 	 * 根据用户Id查询当前用户的角色信息
