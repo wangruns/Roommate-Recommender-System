@@ -48,8 +48,8 @@ public class ReviewController {
 	@PostMapping(value = "review.do")
 	@ResponseBody
 	public String review(HttpServletRequest request,int userId,String review) {
-		//防止过度评论，这里简单的限制一下2分钟只能评论一次
-		if(reviewService.tooQuickly(request)) {
+		//防止过度评论，这里简单的限制一下1分钟只能评论一次
+		if(reviewService.tooQuickly(request,1)) {
 			return ReturnMsg.msg(HttpServletResponse.SC_BAD_REQUEST, "Wait a moment");
 		}
 		boolean isAdded=reviewService.addReview(request,userId,review);

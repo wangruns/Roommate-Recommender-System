@@ -44,10 +44,12 @@ public interface ReviewService {
 	boolean reviewLikeChange(HttpServletRequest request, int reviewId);
 
 	/**
-	 * 简单限制两分钟内只能评价一次
+	 * 简单限制minutes内只能评价一次
 	 * @param request
+	 * @param minutes
+	 * 限制的分钟数
 	 * @return
 	 */
-	boolean tooQuickly(HttpServletRequest request);
+	boolean tooQuickly(HttpServletRequest request,int minutes);
 
 }

@@ -78,7 +78,7 @@ public class ReviewServiceImpl implements ReviewService {
 		return !isLiked;
 	}
 
-	public boolean tooQuickly(HttpServletRequest request) {
+	public boolean tooQuickly(HttpServletRequest request,int minutes) {
 		if(request.getSession().getAttribute("lastTime")==null) {
 			System.out.println("null");
 			request.getSession().setAttribute("lastTime", new SimpleDateFormat("mm").format(new Date()));
@@ -87,7 +87,7 @@ public class ReviewServiceImpl implements ReviewService {
 		String lastMinute=(String) request.getSession().getAttribute("lastTime");
 		String curMinute=new SimpleDateFormat("mm").format(new Date());
 		
-		if( Math.abs(Integer.valueOf(curMinute)- Integer.valueOf(lastMinute)) <=2) {
+		if( Math.abs(Integer.valueOf(curMinute)- Integer.valueOf(lastMinute)) <=minutes) {
 			return true;
 		}
 		request.getSession().setAttribute("lastTime",curMinute);
